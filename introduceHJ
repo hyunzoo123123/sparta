@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> 김현주-개인소개</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
+
+        * {
+            font-family: 'Cute Font', sans-serif;
+        }
+
+        .main {
+            color: darkcyan;
+            
+            background-image: url('https://cdn.discordapp.com/attachments/539859062540730399/1173821067131887736/1.png?ex=656e938e&is=655c1e8e&hm=b45772d1ea213c5a484dbb9c320d2c3a8a44b6ecae85c3e7c0e152065ec32c94&');
+            padding: 50px;
+        }
+
+        .main>background-image {
+            object-fit: cover;
+        }
+
+        body {
+            background-color: black;
+        }
+
+        .mycards {
+            width: 1200px;
+            margin: 20px auto 20px auto;
+        }
+
+        .mypostingbox {
+            width: 500px;
+            margin: 20px 100 20px auto;
+
+            border: 1px solid white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .form-floating>input {
+            background-color: transparent;
+            color: white;
+        }
+
+        .form-floating>label {
+            color: white;
+        }
+
+        .input-group>label {
+            background-color: transparent;
+            color: white;
+        }
+
+        .mypostingbox>button {
+            width: 100%;
+        }
+    </style>
+    <script type="module">
+        // Firebase SDK 라이브러리 가져오기
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAanGbHvGi86BtKt9l0hZ6An59l9Ul3GKQ",
+            authDomain: "sparta-hj.firebaseapp.com",
+            projectId: "sparta-hj",
+            storageBucket: "sparta-hj.appspot.com",
+            messagingSenderId: "941530547795",
+            appId: "1:941530547795:web:118e7ddcebf9ec622028a6",
+            measurementId: "G-96QM17EW8C"
+        };
+
+
+        // Firebase 인스턴스 초기화
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        $("#postingbtn").click(async function () {
+            let vname = $('#vname').val();
+            let date = $('#date').val();
+            let comment = $('#comment').val();
+
+
+            let doc = {
+                'vname': vname,
+                'date': date,
+                'comment': comment
+            };
+            await addDoc(collection(db, "visiter"), doc);
+            alert('방명록 작성 완료!>ㅈ<')
+            window.location.reload();
+        })
+
+
+
+        let docs = await getDocs(collection(db, "visiter"));
+        docs.forEach((doc) => {
+            let row = doc.data();
+
+            let vname = row['vname'];
+            let date = row['date'];
+            let comment = row['comment'];
+
+
+            let temp_html = `
+            <div class="col">
+                    <div class="card-body">
+                        <p class="card-text">${vname}</p>
+                        <h5 class="card-title">${date}</h5>
+                        <p class="card-text">${comment}</p>
+                    </div>
+             </div>`;
+            $('#card').append(temp_html);
+        });
+
+        $("#guestbtn").click(async function () {
+            $('#postingbox').toggle();
+
+        })
+
+
+    </script>
+
+<body>
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="nav-link px-2 text-white"> Kim HyunJoo</li>
+                </ul>
+
+
+
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">김현주를 소개합니다!</h1>
+            <p class="col-md-8 fs-4">
+            </p> MBTI: ESTP
+            </p> 키 : 169.7cm
+            </p> 몸무게 : top secret~
+            </p> 출생일 : 1993년 09월 29일 (양력)
+            </p> 심각한 곱슬머리
+            </p> 좋아하는 말 : 귀여워!
+            </p>
+
+        </div>
+
+        <button id="guestbtn" type="button" class="btn btn-outline-light">방명록 작성하기 on/off</button>
+
+
+    </div>
+
+
+
+
+    <div class="mypostingbox" id="postingbox">
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="vname" placeholder="방문자 이름">
+            <label for="floatingInput">방문자 이름</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="date" placeholder="방문일">
+            <label for="floatingInput">방문일</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="comment" placeholder="방명록 내용">
+            <label for="floatingInput">방명록 내용</label>
+        </div>
+        <button id="postingbtn" type="button" class="btn btn-danger">방명록 작성하기</button>
+    </div>
+
+
+
+    <div class="mycards">
+        <div id="card" class="row row-cols-1 row-cols-md-4 g-4">
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>
